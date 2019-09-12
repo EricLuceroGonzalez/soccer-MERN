@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Require Schema's
 const Player = require('../models/playerSchema');
-
+const Team = require('../models/teamSchema')
 // -------------   CRUD  -----------------
 app.get("/", (req, res) => {
   console.log("Hello World");
@@ -36,6 +36,20 @@ app.post("/api/v1/player", (req, res) => {
     return err
       ? res.status(400).send({ mensaje: "Hay un error", res: err })
       : res.status(200).send({ mensaje: "Player guardado", res: newPlayer });
+  });
+});
+
+//  C: CREATE ------------
+app.post("/api/v1/team", (req, res) => {
+  // Recibir el jugador
+  console.log(req.body);
+
+  // Guardar en db
+  const newTeam = new Team(req.body);
+  newTeam.save((err, newTeam) => {
+    return err
+      ? res.status(400).send({ mensaje: "Hay un error", res: err })
+      : res.status(200).send({ mensaje: "Player guardado", res: newTeam });
   });
 });
 
