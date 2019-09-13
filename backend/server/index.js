@@ -9,6 +9,9 @@ app.use(cors());
 // Check port
 const port = process.env.port || 4001;
 
+const passport = require("passport");
+const users = require('./users');
+
 var dotenv = require("dotenv");
 dotenv.config();
 
@@ -18,8 +21,8 @@ app.use(bodyParser.json()); // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Require Schema's
-const Player = require('../models/playerSchema');
-const Team = require('../models/teamSchema')
+const Player = require("../models/playerSchema");
+const Team = require("../models/teamSchema");
 // -------------   CRUD  -----------------
 app.get("/", (req, res) => {
   console.log("Hello World");
@@ -52,6 +55,11 @@ app.post("/api/v1/team", (req, res) => {
       : res.status(200).send({ mensaje: "Player guardado", res: newTeam });
   });
 });
+
+// Passport middleware
+app.use(passport.initialize()); // Passport config
+require('../config/passport')(passport); // Routes
+app.use('./users', users);
 
 // Send variables when this file is 'required'
 module.exports = { app, port };
